@@ -93,11 +93,8 @@ environments.  It is designed to be:
 git clone https://github.com/zubinqayam/ZQ-Android-Build-Container.git my-app
 cd my-app
 
-# 2. Bootstrap the Gradle wrapper (requires Gradle installed locally OR
-#    use Android Studio → File → Project Structure → Gradle to set the version)
-gradle wrapper --gradle-version 8.7 --distribution-type all
-
-# 3. Build a debug APK
+# 2. Build a debug APK (Gradle 8.7 wrapper is already included)
+chmod +x ./gradlew
 ./gradlew assembleDebug
 
 # The APK is at: app/build/outputs/apk/debug/app-debug.apk
@@ -148,23 +145,21 @@ Versions are controlled by environment variables in `install-android-sdk.sh`:
 
 ## Gradle Wrapper Bootstrap
 
-The `gradlew` / `gradlew.bat` files in this repo are **stubs** that print a
-helpful error if `gradle-wrapper.jar` is missing.  Replace them by running:
+A **real** Gradle 8.7 wrapper (`gradlew`, `gradlew.bat`,
+`gradle/wrapper/gradle-wrapper.jar`, and
+`gradle/wrapper/gradle-wrapper.properties`) is included in this repository.
+No manual bootstrap step is required.
+
+To **upgrade** the Gradle version:
 
 ```bash
-# Option A – if Gradle is installed locally
-gradle wrapper --gradle-version 8.7 --distribution-type all
+# Regenerate the wrapper with the desired Gradle version
+gradle wrapper --gradle-version <NEW_VERSION> --distribution-type all
 
-# Option B – via Android Studio
-# File → Project Structure → Project → Gradle Version → 8.7 → OK
-```
-
-Then commit the generated files:
-```
-gradle/wrapper/gradle-wrapper.jar    ← must be committed
-gradle/wrapper/gradle-wrapper.properties
-gradlew
-gradlew.bat
+# Commit the updated files
+git add gradlew gradlew.bat gradle/wrapper/gradle-wrapper.jar \
+        gradle/wrapper/gradle-wrapper.properties
+git commit -m "chore: upgrade Gradle wrapper to <NEW_VERSION>"
 ```
 
 > **AGP / Gradle compatibility:** AGP 8.4.x (declared in `build.gradle`)

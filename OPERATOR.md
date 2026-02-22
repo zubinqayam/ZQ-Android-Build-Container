@@ -88,31 +88,27 @@ changes manually:
 
 ---
 
-## Step 3 – Bootstrap the Gradle Wrapper
+## Step 3 – Verify the Gradle Wrapper
 
-The `gradlew` stubs in the template will refuse to run without a real wrapper
-JAR.  Bootstrap it once:
+A real Gradle 8.7 wrapper is already included in the repository.
+Verify it is executable and working:
 
-```bash
-# Option A: local Gradle installation
-gradle wrapper --gradle-version 8.7 --distribution-type all
-
-# Option B: Android Studio
-# File → Project Structure → Project → Gradle Version → 8.7 → OK
-```
-
-Commit the generated files:
-```bash
-git add gradlew gradlew.bat gradle/wrapper/gradle-wrapper.jar \
-        gradle/wrapper/gradle-wrapper.properties
-git commit -m "chore: add Gradle wrapper"
-```
-
-Verify the wrapper works:
 ```bash
 chmod +x ./gradlew
 ./gradlew --version
 ```
+
+If you need to **upgrade** the Gradle version:
+
+```bash
+gradle wrapper --gradle-version <NEW_VERSION> --distribution-type all
+git add gradlew gradlew.bat gradle/wrapper/gradle-wrapper.jar \
+        gradle/wrapper/gradle-wrapper.properties
+git commit -m "chore: upgrade Gradle wrapper to <NEW_VERSION>"
+```
+
+Check the [AGP / Gradle compatibility matrix](https://developer.android.com/build/releases/gradle-plugin)
+before upgrading.
 
 ---
 
@@ -140,6 +136,7 @@ source ~/.bashrc
 ## Step 5 – Build a Debug APK
 
 ```bash
+chmod +x ./gradlew
 ./gradlew assembleDebug
 # Output: app/build/outputs/apk/debug/app-debug.apk
 ```
