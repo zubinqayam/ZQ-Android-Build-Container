@@ -1,0 +1,39 @@
+// =============================================================================
+// build.gradle (root)  –  Top-level build script
+//
+// Defines the plugin versions used across all submodules.
+// Do NOT add application-level dependencies here; put them in app/build.gradle.
+// =============================================================================
+
+// ── Plugin dependency management ─────────────────────────────────────────────
+// Versions are declared here for DRY consistency; update them in one place.
+buildscript {
+    ext {
+        agpVersion     = '8.4.2'    // Android Gradle Plugin
+        kotlinVersion  = '1.9.24'   // Kotlin – only needed if you add Kotlin modules
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:${agpVersion}"
+        // Uncomment to enable Kotlin:
+        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+    }
+}
+
+// ── Repository configuration for all sub-projects ───────────────────────────
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// ── Clean task ────────────────────────────────────────────────────────────────
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}

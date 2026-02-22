@@ -1,0 +1,99 @@
+// =============================================================================
+// app/build.gradle  –  Module-level Gradle build script (Groovy DSL)
+//
+// ── Customisation checklist ──────────────────────────────────────────────────
+// 1. applicationId  : replace "com.example.app" with your reverse-DNS id.
+// 2. versionCode    : increment for every Play Store / OTA upload.
+// 3. versionName    : follows semver; can be overridden by CI with -PversionName.
+// 4. minSdk         : lower only if you explicitly test on older devices.
+// 5. Signing        : un-comment the signingConfigs block below and supply
+//                     credentials via environment variables (never hardcode).
+// =============================================================================
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace         'com.example.app'   // matches AndroidManifest package
+    compileSdk        34
+
+    defaultConfig {
+        // ── Identity ──────────────────────────────────────────────────────────
+        // applicationId MUST be unique on the Play Store / your private store.
+        applicationId "com.example.app"
+
+        minSdk     24   // Android 7.0 Nougat – covers ~99% of active devices
+        targetSdk  34   // Always target the latest stable API
+
+        // ── Version ───────────────────────────────────────────────────────────
+        // versionName can be overridden by CI: ./gradlew assembleRelease -PversionName=1.2.3
+        versionCode 1
+        versionName project.hasProperty('versionName') ? project.versionName : '1.0.0'
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // ── Signing configurations ────────────────────────────────────────────────
+    // Un-comment and populate to enable signed release builds locally.
+    // In CI, credentials are injected via environment variables by release-apk.yml.
+    //
+    // signingConfigs {
+    //     release {
+    //         storeFile     file(System.getenv("SIGNING_KEYSTORE_PATH") ?: "release.jks")
+    //         storePassword System.getenv("SIGNING_STORE_PASSWORD")
+    //         keyAlias      System.getenv("SIGNING_KEY_ALIAS")
+    //         keyPassword   System.getenv("SIGNING_KEY_PASSWORD")
+    //     }
+    // }
+
+    buildTypes {
+        // ── Debug ─────────────────────────────────────────────────────────────
+        debug {
+            // Automatically signed with the Android debug keystore.
+            // No additional configuration required.
+            applicationIdSuffix ".debug"
+            versionNameSuffix   "-debug"
+            debuggable true
+        }
+
+        // ── Release ───────────────────────────────────────────────────────────
+        release {
+            // To activate signing, un-comment signingConfigs above and
+            // uncomment the signingConfig line below.
+            // signingConfig signingConfigs.release
+
+            // ProGuard / R8 – enable when you are ready to optimise the APK.
+            // Supply your own rules in proguard-rules.pro.
+            minifyEnabled   false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                          'proguard-rules.pro'
+        }
+    }
+
+    // ── Java compile options ──────────────────────────────────────────────────
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // ── Build features ────────────────────────────────────────────────────────
+    buildFeatures {
+        // viewBinding true   // uncomment to use View Binding
+        // dataBinding true   // uncomment to use Data Binding
+        buildConfig true
+    }
+}
+
+dependencies {
+    // ── AndroidX core ─────────────────────────────────────────────────────────
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // ── Testing ───────────────────────────────────────────────────────────────
+    testImplementation         'junit:junit:4.13.2'
+    androidTestImplementation  'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation  'androidx.test.espresso:espresso-core:3.6.1'
+}
