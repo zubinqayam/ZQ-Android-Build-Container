@@ -142,7 +142,14 @@ jobs:
       - name: Compute APK checksum
         id: checksum
         run: |
-          APK_PATH=$(find app/build/outputs/apk/release -name "*.apk" | head -1)
+          APK_DIR="app/build/outputs/apk/release"
+          apks=("${APK_DIR}"/*.apk)
+          if [ ${#apks[@]} -ne 1 ]; then
+            echo "Expected exactly 1 APK in ${APK_DIR}, but found ${#apks[@]}:" >&2
+            printf '  %s\n' "${apks[@]}" >&2 || true
+            exit 1
+          fi
+          APK_PATH="${apks[0]}"
           SHA256=$(sha256sum "${APK_PATH}" | awk '{print $1}')
           echo "sha256=${SHA256}"   >> "$GITHUB_OUTPUT"
           echo "apk_path=${APK_PATH}" >> "$GITHUB_OUTPUT"
