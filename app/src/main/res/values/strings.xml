@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  strings.xml – all user-visible strings for the skeleton app.
+
+  ── Customisation ────────────────────────────────────────────────────────────
+  • app_name   : set to your application's display name.
+                 Also matches AndroidManifest.xml android:label="@string/app_name".
+  • Add locale-specific translations by creating
+    res/values-<language-code>/strings.xml (e.g. values-es/, values-fr/).
+  ─────────────────────────────────────────────────────────────────────────────
+-->
+<resources>
+    <!-- Application display name shown in the launcher and app switcher -->
+    <string name="app_name">MyApp</string>
+
+    <!-- Placeholder text shown on the main screen -->
+    <string name="hello_world">Hello, World!</string>
+</resources>

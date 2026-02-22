@@ -1,0 +1,40 @@
+// =============================================================================
+// settings.gradle  –  Gradle project settings
+//
+// ── Customisation ────────────────────────────────────────────────────────────
+// • rootProject.name : used in generated artifact names; change to match your
+//                      app's branding (no spaces; kebab-case recommended).
+// • include          : list every Gradle module (subproject) here.
+// =============================================================================
+
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex "com\\.android.*"
+                includeGroupByRegex "com\\.google.*"
+                includeGroupByRegex "androidx.*"
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// ── Project identity ──────────────────────────────────────────────────────────
+// Change "MyApp" to your application's project name.
+rootProject.name = "MyApp"
+
+// ── Submodules ────────────────────────────────────────────────────────────────
+// Add new library/feature modules here as you create them:
+//   include ':feature-login'
+//   include ':core-network'
+include ':app'

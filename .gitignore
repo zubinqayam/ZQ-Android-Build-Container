@@ -1,0 +1,67 @@
+# =============================================================================
+# .gitignore  –  ZQ Android Build Container
+# Based on the standard Android .gitignore with sovereign-pipeline additions.
+# =============================================================================
+
+# ── Build outputs ─────────────────────────────────────────────────────────────
+build/
+*/build/
+out/
+
+# ── Gradle ────────────────────────────────────────────────────────────────────
+.gradle/
+# NOTE: gradle-wrapper.jar MUST be committed – do not ignore it.
+# gradle/wrapper/gradle-wrapper.jar  ← intentionally NOT listed here
+
+# ── Android Studio / IntelliJ ────────────────────────────────────────────────
+*.iml
+.idea/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/modules.xml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# ── Local property files (contain SDK/NDK paths; machine-specific) ────────────
+local.properties
+
+# ── Signing keystores ─────────────────────────────────────────────────────────
+# IMPORTANT: NEVER commit a real keystore or its base64 encoding.
+*.jks
+*.keystore
+*.jks.b64
+*.keystore.b64
+
+# ── Generated distribution archives ──────────────────────────────────────────
+*.zip
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+*.DS_Store
+
+# ── Windows ───────────────────────────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── Linux swap files ──────────────────────────────────────────────────────────
+*~
+
+# ── Node / tooling ────────────────────────────────────────────────────────────
+node_modules/
+
+# ── Proguard mapping (add to .gitignore only if you do NOT need to de-obfuscate
+# crash reports from released builds; keep it if you do) ──────────────────────
+# app/build/outputs/mapping/
+
+# ── Fastlane ─────────────────────────────────────────────────────────────────
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/readme.md

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AndroidManifest.xml – minimal manifest for the sovereign pipeline skeleton.
+
+  ── Customisation instructions ───────────────────────────────────────────────
+  • package      : change to your own reverse-DNS identifier
+                   (e.g. com.yourorg.yourapp).
+                   Also update:
+                     – app/build.gradle   → applicationId
+                     – settings.gradle    → rootProject.name (optional)
+                     – all Java/Kotlin source file package declarations
+  • android:label: change to your app's display name or move the string to
+                   res/values/strings.xml (recommended for i18n).
+  • Permissions  : add <uses-permission> elements here as needed.
+  ─────────────────────────────────────────────────────────────────────────────
+-->
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.app">
+
+    <!-- Internet permission – remove if your app does not need network access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

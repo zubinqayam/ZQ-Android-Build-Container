@@ -1,0 +1,48 @@
+{
+  // ── ZQ Android Build Container – Codespaces / Dev Container config ──────────
+  // Docs: https://containers.dev/implementors/json_reference/
+  "name": "ZQ Android Build Container",
+
+  // Base image: Ubuntu 22.04 LTS (Jammy). Change to a specific digest for
+  // fully reproducible builds in a sovereign / air-gapped environment.
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+
+  // Run the SDK installer once the container is created so the workspace is
+  // immediately ready without any manual setup step.
+  "postCreateCommand": "bash .devcontainer/install-android-sdk.sh",
+
+  // ── Forwarded ports ─────────────────────────────────────────────────────────
+  // Uncomment to expose an ADB-over-TCP port when running an emulator inside
+  // the container (requires KVM / nested virtualisation on the host):
+  // "forwardPorts": [5554, 5555],
+
+  // ── VS Code extensions pre-installed in the Codespace ────────────────────────
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",          // Java language support
+        "mathiasfrohlich.Kotlin",            // Kotlin syntax highlighting
+        "naco-siren.gradle-language",        // Gradle build scripts
+        "esbenp.prettier-vscode",            // General formatter
+        "redhat.vscode-xml"                  // XML / AndroidManifest editor
+      ],
+      "settings": {
+        "java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
+        "android.sdkRoot": "${localEnv:ANDROIDSDKROOT}"
+      }
+    }
+  },
+
+  // ── Container environment variables ─────────────────────────────────────────
+  // ANDROIDSDKROOT is the canonical variable used by the install script and
+  // all Gradle/AGP tooling in this repo. Do NOT change the name here without
+  // also updating install-android-sdk.sh and every workflow file.
+  "remoteEnv": {
+    "ANDROIDSDKROOT": "/opt/android-sdk",
+    "ANDROID_HOME": "/opt/android-sdk",
+    "PATH": "${containerEnv:PATH}:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools"
+  },
+
+  // ── Run as non-root ──────────────────────────────────────────────────────────
+  "remoteUser": "vscode"
+}

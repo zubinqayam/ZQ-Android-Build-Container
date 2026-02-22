@@ -1,0 +1,56 @@
+{
+  "$comment": [
+    "Private-store stub – describes the minimal REST API your internal app",
+    "catalogue must implement to serve OTA updates to managed devices.",
+    "",
+    "Replace every '<PLACEHOLDER>' value with your real infrastructure.",
+    "This file is NOT read by any workflow; it is documentation-as-code."
+  ],
+
+  "storeApiVersion": "1",
+  "baseUrl": "https://<YOUR_PRIVATE_STORE_HOST>/api/v1",
+
+  "endpoints": {
+    "latestRelease": {
+      "method": "GET",
+      "path": "/apps/{appId}/latest",
+      "description": "Returns the latest release metadata for the given appId.",
+      "responseShape": {
+        "appId":        "string",
+        "version":      "string (semver)",
+        "downloadUrl":  "string (HTTPS URL to signed APK)",
+        "sha256":       "string (hex SHA-256 of the APK)",
+        "releaseDate":  "string (ISO 8601 date)",
+        "releaseNotes": "object (locale → string)"
+      }
+    },
+    "downloadApk": {
+      "method": "GET",
+      "path": "/apps/{appId}/releases/{version}/download",
+      "description": "Redirects (HTTP 302) to the signed APK file.",
+      "authentication": "Bearer <MDM_TOKEN>"
+    },
+    "reportInstall": {
+      "method": "POST",
+      "path": "/apps/{appId}/installations",
+      "description": "Called by the MDM agent after a successful install.",
+      "requestBodyShape": {
+        "deviceId":     "string",
+        "version":      "string",
+        "installedAt":  "string (ISO 8601 datetime)"
+      }
+    }
+  },
+
+  "authScheme": {
+    "type": "Bearer",
+    "tokenEnvVar": "PRIVATE_STORE_TOKEN",
+    "notes": "Provision a short-lived token per device via your MDM platform."
+  },
+
+  "mdmIntegrations": {
+    "intune":   "Configure a custom managed app pointing to baseUrl/apps/{appId}/latest",
+    "jamf":     "Use the 'Custom Apps' feature with the manifest endpoint above",
+    "airwatch": "Use the 'Internal Apps' feature; supply the download URL from the manifest"
+  }
+}
