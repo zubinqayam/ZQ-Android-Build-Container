@@ -200,11 +200,15 @@ Output:
 
 ## Signing Configuration
 
-### Local Development (unsigned)
-By default `minifyEnabled` and signing are disabled in `app/build.gradle`.
+### Local Development (debug)
 Debug builds are signed automatically with the Android debug keystore.
+No additional configuration required.
 
 ### CI / Production Signing
+Signing is active by default in `app/build.gradle` — it reads credentials from
+the `SIGNING_*` environment variables that `release-apk.yml` injects at
+build time.
+
 1. Generate a keystore:
    ```bash
    keytool -genkey -v -keystore release.jks \
@@ -223,9 +227,15 @@ Debug builds are signed automatically with the Android debug keystore.
    | `STORE_PASSWORD`       | Store password                |
 4. Push a tag: `git tag v1.0.0 && git push origin v1.0.0`
 
-To activate signing in **local** release builds, un-comment the
-`signingConfigs` block in `app/build.gradle` and set the four
-`SIGNING_*` environment variables.
+For **local** signed release builds, export the four `SIGNING_*` variables
+before running `./gradlew assembleRelease`:
+```bash
+export SIGNING_KEYSTORE_PATH=/path/to/release.jks
+export SIGNING_STORE_PASSWORD=<store-password>
+export SIGNING_KEY_ALIAS=<alias>
+export SIGNING_KEY_PASSWORD=<key-password>
+./gradlew assembleRelease
+```
 
 > ⚠️ **Never commit a plaintext keystore or password to source control.**
 

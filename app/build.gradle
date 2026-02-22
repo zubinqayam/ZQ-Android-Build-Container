@@ -6,8 +6,9 @@
 // 2. versionCode    : increment for every Play Store / OTA upload.
 // 3. versionName    : follows semver; can be overridden by CI with -PversionName.
 // 4. minSdk         : lower only if you explicitly test on older devices.
-// 5. Signing        : un-comment the signingConfigs block below and supply
-//                     credentials via environment variables (never hardcode).
+// 5. Signing        : active by default when SIGNING_* env vars are set.
+//                     See release-apk.yml – credentials are injected by CI.
+//                     For local release builds export the four SIGNING_* vars.
 // =============================================================================
 
 plugins {
@@ -35,17 +36,28 @@ android {
     }
 
     // ── Signing configurations ────────────────────────────────────────────────
-    // Un-comment and populate to enable signed release builds locally.
-    // In CI, credentials are injected via environment variables by release-apk.yml.
+    // Credentials are injected via environment variables by release-apk.yml.
+    // For local signed builds, export the four SIGNING_* variables before
+    // running ./gradlew assembleRelease (never hard-code values here).
     //
-    // signingConfigs {
-    //     release {
-    //         storeFile     file(System.getenv("SIGNING_KEYSTORE_PATH") ?: "release.jks")
-    //         storePassword System.getenv("SIGNING_STORE_PASSWORD")
-    //         keyAlias      System.getenv("SIGNING_KEY_ALIAS")
-    //         keyPassword   System.getenv("SIGNING_KEY_PASSWORD")
-    //     }
-    // }
+    // SIGNING_KEYSTORE_PATH  – absolute path to the release .jks file
+    // SIGNING_STORE_PASSWORD – keystore password
+    // SIGNING_KEY_ALIAS      – key alias inside the keystore
+    // SIGNING_KEY_PASSWORD   – key password
+    signingConfigs {
+        release {
+            def keystorePath = System.getenv("SIGNING_KEYSTORE_PATH")
+            // Only configure signing when the env vars are present so that
+            // builds without the keystore (e.g. local debug-only runs) still
+            // compile cleanly.
+            if (keystorePath) {
+                storeFile     file(keystorePath)
+                storePassword System.getenv("SIGNING_STORE_PASSWORD")
+                keyAlias      System.getenv("SIGNING_KEY_ALIAS")
+                keyPassword   System.getenv("SIGNING_KEY_PASSWORD")
+            }
+        }
+    }
 
     buildTypes {
         // ── Debug ─────────────────────────────────────────────────────────────
@@ -59,9 +71,9 @@ android {
 
         // ── Release ───────────────────────────────────────────────────────────
         release {
-            // To activate signing, un-comment signingConfigs above and
-            // uncomment the signingConfig line below.
-            // signingConfig signingConfigs.release
+            // Signing is active when SIGNING_KEYSTORE_PATH is set (always true
+            // in CI via release-apk.yml; optional for local builds).
+            signingConfig signingConfigs.release
 
             // ProGuard / R8 – enable when you are ready to optimise the APK.
             // Supply your own rules in proguard-rules.pro.

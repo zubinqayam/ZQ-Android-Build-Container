@@ -171,9 +171,9 @@ chmod +x ./gradlew
    | `KEY_PASSWORD`         | The key password you chose        |
    | `STORE_PASSWORD`       | The store password you chose      |
 
-4. **Enable signing in `app/build.gradle`** by un-commenting the
-   `signingConfigs.release` block and `signingConfig signingConfigs.release`
-   inside `buildTypes.release`.
+4. Signing is now **active by default** in `app/build.gradle` — it reads
+   credentials from `SIGNING_*` environment variables.  No code change needed;
+   just add the four secrets above and push a tag.
 
 ---
 
@@ -244,5 +244,5 @@ Edit the following in **one place**:
 | `gradle-wrapper.jar is missing` | wrapper not bootstrapped | Run `gradle wrapper …` (Step 3) |
 | `SDK location not found` | `ANDROIDSDKROOT` not set | Export the variable (Step 4) |
 | `License for package … not accepted` | fresh SDK install | `yes \| sdkmanager --licenses` |
-| Release build unsigned | signing not activated | Un-comment `signingConfigs` in `app/build.gradle` and add secrets (Step 6) |
+| Release build unsigned | `SIGNING_*` env vars not set | Add the four secrets (Step 6); signing reads env vars automatically |
 | OTA manifest not updated | CI push failed | Check runner `contents: write` permission in `release-apk.yml` |
